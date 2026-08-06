@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ViVi不動産 社内ツールポータル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-navy:#0E1C2E;
+    --panel-navy:#142B45;
+    --panel-navy-hover:#1A3552;
+    --grid-line: rgba(150, 186, 218, 0.10);
+    --grid-line-strong: rgba(150, 186, 218, 0.22);
+    --paper:#F3EFE6;
+    --paper-dim:#C7D2DE;
+    --copper:#C6803F;
+    --copper-bright:#E0955A;
+    --gold:#D9A94C;
+    --muted-blue:#7C97B0;
+    --line-thin: rgba(199, 210, 222, 0.18);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background:var(--bg-navy);
+    color:var(--paper);
+    font-family:"Noto Sans JP", sans-serif;
+    background-image:
+      repeating-linear-gradient(0deg, var(--grid-line) 0px, var(--grid-line) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--grid-line) 0px, var(--grid-line) 1px, transparent 1px, transparent 32px);
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding: 48px 24px 32px;
+  }
+
+  /* ---------- HEADER / TITLE BLOCK ---------- */
+  header{
+    position:relative;
+    border:1px solid var(--line-thin);
+    border-radius:2px;
+    padding: 36px 32px;
+    margin-bottom: 56px;
+    background: linear-gradient(180deg, rgba(20,43,69,0.4), rgba(20,43,69,0.05));
+  }
+
+  .eyebrow{
+    font-family:"IBM Plex Mono", monospace;
+    letter-spacing: 0.18em;
+    font-size:12px;
+    color:var(--copper-bright);
+    text-transform:uppercase;
+    margin:0 0 14px;
+  }
+
+  h1{
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-weight:900;
+    font-size: clamp(28px, 4.2vw, 44px);
+    margin: 0 0 12px;
+    letter-spacing: 0.02em;
+    color:var(--paper);
+  }
+
+  header p.lead{
+    font-size:15px;
+    color:var(--paper-dim);
+    max-width:560px;
+    line-height:1.8;
+    margin:0;
+  }
+
+  .title-block{
+    position:absolute;
+    right:32px;
+    bottom:28px;
+    text-align:right;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    color:var(--muted-blue);
+    line-height:1.9;
+    border-left:1px solid var(--line-thin);
+    padding-left:16px;
+    display:none;
+  }
+
+  @media (min-width: 720px){
+    .title-block{ display:block; }
+  }
+
+  .title-block .row{ display:flex; gap:14px; justify-content:flex-end; }
+  .title-block .k{ color:var(--copper-bright); }
+
+  /* ---------- SEARCH ---------- */
+  .search-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom: 44px;
+    border-bottom:1px solid var(--line-thin);
+    padding-bottom: 16px;
+  }
+  .search-row label{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    color:var(--muted-blue);
+    letter-spacing:0.1em;
+    white-space:nowrap;
+  }
+  .search-row input{
+    flex:1;
+    background:transparent;
+    border:none;
+    border-bottom:1px dashed var(--line-line, var(--line-thin));
+    color:var(--paper);
+    font-family:"Noto Sans JP", sans-serif;
+    font-size:15px;
+    padding:6px 4px;
+    outline:none;
+  }
+  .search-row input::placeholder{ color:var(--muted-blue); }
+  .search-row input:focus{ border-bottom:1px solid var(--copper-bright); }
+  .result-count{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    color:var(--muted-blue);
+    white-space:nowrap;
+  }
+
+  /* ---------- ZONE (CATEGORY) ---------- */
+  .zone{ margin-bottom: 52px; }
+
+  .zone-divider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom: 22px;
+  }
+  .zone-tag{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.08em;
+    color:var(--bg-navy);
+    background:var(--gold);
+    padding:4px 9px 3px;
+    border-radius:2px;
+    flex-shrink:0;
+  }
+  .zone-title{
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-weight:700;
+    font-size:18px;
+    color:var(--paper);
+    white-space:nowrap;
+  }
+  .zone-line{
+    flex:1;
+    height:1px;
+    background:
+      linear-gradient(90deg, var(--line-thin) 0 8px, transparent 8px 16px) repeat-x;
+    background-size: 16px 1px;
+    position:relative;
+  }
+  .zone-line::before, .zone-line::after{
+    content:"";
+    position:absolute;
+    width:1px; height:8px;
+    background:var(--line-thin);
+    top:-4px;
+  }
+  .zone-line::before{ left:0; }
+  .zone-line::after{ right:0; }
+
+  .cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap:16px;
+  }
+
+  /* ---------- CARD ---------- */
+  .card{
+    background:var(--panel-navy);
+    border:1px solid var(--line-thin);
+    border-radius:3px;
+    padding:20px 20px 16px;
+    display:flex;
+    flex-direction:column;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    position:relative;
+  }
+  .card:hover{
+    background:var(--panel-navy-hover);
+    border-color: var(--copper);
+    transform: translateY(-2px);
+  }
+
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:10px;
+  }
+
+  .card h3{
+    font-family:"Zen Kaku Gothic New", sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--paper);
+    margin:0;
+    line-height:1.5;
+  }
+
+  .audience{
+    flex-shrink:0;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10px;
+    color:var(--copper-bright);
+    border:1px solid var(--copper);
+    padding:3px 7px 2px;
+    border-radius:2px;
+    white-space:nowrap;
+    letter-spacing:0.02em;
+  }
+
+  .desc{
+    font-size:13.5px;
+    color:var(--paper-dim);
+    line-height:1.75;
+    margin:0 0 12px;
+  }
+
+  .hint{
+    font-size:12.5px;
+    color:var(--muted-blue);
+    line-height:1.7;
+    margin:0 0 16px;
+    padding-left:12px;
+    border-left:2px solid var(--gold);
+  }
+  .hint b{ color:var(--gold); font-weight:500; }
+
+  .card-footer{
+    margin-top:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:12px;
+    border-top:1px solid var(--line-thin);
+  }
+
+  .slug{
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    color:var(--muted-blue);
+    letter-spacing:0.02em;
+  }
+
+  .open-btn{
+    font-family:"Noto Sans JP", sans-serif;
+    font-size:13px;
+    font-weight:500;
+    color:var(--bg-navy);
+    background:var(--copper-bright);
+    padding:7px 14px;
+    border-radius:2px;
+    text-decoration:none;
+    transition: background 0.15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .open-btn:hover{ background:var(--gold); }
+  .open-btn::after{ content:"→"; }
+
+  .note-pill{
+    display:inline-block;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:10.5px;
+    color:var(--gold);
+    margin-top:2px;
+  }
+
+  .empty-msg{
+    color:var(--muted-blue);
+    font-size:13px;
+    padding:24px 4px;
+    display:none;
+  }
+
+  /* ---------- FOOTER TITLE BLOCK ---------- */
+  footer{
+    margin-top:40px;
+    padding-top:20px;
+    border-top:1px solid var(--line-thin);
+    display:flex;
+    flex-wrap:wrap;
+    gap:24px;
+    justify-content:space-between;
+    font-family:"IBM Plex Mono", monospace;
+    font-size:11px;
+    color:var(--muted-blue);
+  }
+  footer .k{ color:var(--copper-bright); }
+
+  @media (max-width: 600px){
+    header{ padding:28px 20px; }
+    .wrap{ padding: 32px 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">VIVI FUDOSAN &mdash; INTERNAL TOOLS</p>
+    <h1>社内ツールポータル</h1>
+    <p class="lead">営業・工務・事務、日々の実務で使うツールをまとめています。ツール名やキーワードで絞り込みできます。</p>
+    <div class="title-block">
+      <div class="row"><span class="k">PROJECT</span><span>ViVi不動産 社内ツール一式</span></div>
+      <div class="row"><span class="k">REV</span><span>2026.08</span></div>
+      <div class="row"><span class="k">DRAWN BY</span><span>S.YAGO</span></div>
+    </div>
+  </header>
+
+  <div class="search-row">
+    <label for="search">FIND&nbsp;/</label>
+    <input id="search" type="text" placeholder="ツール名・対象・キーワードで検索（例：見積、テレアポ、採用）">
+    <span class="result-count" id="resultCount"></span>
+  </div>
+
+  <div id="zones"></div>
+
+  <p class="empty-msg" id="emptyMsg">該当するツールが見つかりません。別のキーワードでお試しください。</p>
+
+  <footer>
+    <div><span class="k">SCALE</span> 1:1 &nbsp;&nbsp;<span class="k">SHEET</span> 01 / 01</div>
+    <div>各ツールはGitHub Pagesにて個別公開・社内用途限定です</div>
+  </footer>
+
+</div>
+
+<script>
+const ZONES = [
+  {
+    code: "A",
+    title: "資金計画・見積",
+    tools: [
+      {
+        name: "フルリノベ見積ツール",
+        url: "https://s-yago.github.io/fullreno-estimate/",
+        slug: "fullreno-estimate",
+        audience: "営業",
+        desc: "マンション・戸建てのフルリノベ費用を基準単価から自動算出します。",
+        hint: "<b>基準:</b> マンション73㎡・1,033万円 / 戸建105㎡・1,528万円。面積を入力すると自動計算されます。"
+      },
+      {
+        name: "水回り見積ツール",
+        url: "https://s-yago.github.io/mizumawari-estimate/",
+        slug: "mizumawari-estimate",
+        audience: "営業",
+        desc: "キッチン・浴室・トイレなど水回りリフォームの見積を作成します。",
+        hint: "<b>基準:</b> マンション330万円・戸建320万円。タカラスタンダード・TOTOの機種名まで明記して提示できます。"
+      },
+      {
+        name: "見積比較ツール",
+        url: "https://s-yago.github.io/mitsumori-compare/",
+        slug: "mitsumori-compare",
+        audience: "営業",
+        desc: "複数プランの見積を並べて比較提示します。",
+        hint: "<b>使う場面:</b> 他社見積との比較や、プランA/Bの差を顧客に視覚的に説明したいとき。"
+      },
+      {
+        name: "住宅ローン比較ツール / 資金計画シミュレーター",
+        url: "https://s-yago.github.io/shikin-plan/",
+        slug: "shikin-plan",
+        audience: "営業",
+        desc: "北陸銀行・北陸ろうきん・富山第一銀行のローン条件を比較し、リノベ費用込みの資金計画を作成します。",
+        hint: "<b>入力方法:</b> 当初適用金利は手入力、以降は店頭基準金利－引下げ幅で自動計算。リノベ工事費はフルリノベ見積と同じ計算式です。"
+      },
+      {
+        name: "残金決済・清算書ツール",
+        url: "https://s-yago.github.io/zankin-annai/",
+        slug: "zankin-annai",
+        audience: "事務・営業",
+        desc: "決済時の清算書・案内書類を自動作成します。",
+        hint: "<b>判定:</b> 売主・買主の分類はハトサポPDFの表記から自動判定。代理人がいる場合も入力対応しています。<br><b>パスワード:</b> vivi-zankin（社外への共有は不可）",
+        note: "🔒 パスワード保護あり"
+      }
+    ]
+  },
+  {
+    code: "B",
+    title: "接客・営業支援",
+    tools: [
+      {
+        name: "アプローチブック（買主向け）",
+        url: "https://s-yago.github.io/kaiapproach-script/",
+        slug: "kaiapproach-script",
+        audience: "営業・買主接客",
+        desc: "買主接客用のトークスクリプトです（42カード・60分想定）。",
+        hint: "<b>使う場面:</b> 媒介契約・インスペクション・かし保険など、説明が必要な項目をカード順に案内します。"
+      },
+      {
+        name: "アプローチブック（売主向け）",
+        url: "https://s-yago.github.io/uriapproach-script/",
+        slug: "uriapproach-script",
+        audience: "営業・売主接客",
+        desc: "売主接客用のトークスクリプトです（37カード・30分想定）。",
+        hint: "<b>使う場面:</b> 媒介契約の説明や、囲い込みゼロ方針をわかりやすく伝えたいとき。"
+      },
+      {
+        name: "リノベ好み診断ツール",
+        url: "https://s-yago.github.io/reno-shindan/",
+        slug: "reno-shindan",
+        audience: "営業",
+        desc: "5ライフスタイルタイプ×マンション/戸建てで、顧客のリノベ好みを診断します。",
+        hint: "<b>特徴:</b> ご夫婦などA/B二人同時回答が可能。ペイン設問で優先的に解決したい課題を可視化します。"
+      }
+    ]
+  },
+  {
+    code: "C",
+    title: "業務管理",
+    tools: [
+      {
+        name: "買取再販ボード",
+        url: "https://s-yago.github.io/kaitoridsaihan/",
+        slug: "kaitoridsaihan",
+        audience: "工務・営業管理",
+        desc: "買取再販物件の進行状況を7フェーズで管理するかんばんボードです。",
+        hint: "<b>機能:</b> ハトサポ台帳PDFの取り込み、180日スケジュール管理、ガントチャート、価格改定追跡、粗利計算に対応。"
+      }
+    ]
+  },
+  {
+    code: "D",
+    title: "集客・追客",
+    tools: [
+      {
+        name: "テレアポツール",
+        url: "https://s-yago.github.io/telapo/",
+        slug: "telapo",
+        audience: "テレアポ担当",
+        desc: "売却反響・会員登録反響・物件反響・引き上げ、4モードのテレアポスクリプトです。",
+        hint: "<b>パスワード:</b> vivi-telapo（社外への共有は不可）",
+        note: "🔒 パスワード保護あり"
+      }
+    ]
+  },
+  {
+    code: "E",
+    title: "採用",
+    tools: [
+      {
+        name: "採用適性テスト",
+        url: "https://s-yago.github.io/vivi-saiyoutest/vivi-tekisei.html",
+        slug: "vivi-saiyoutest",
+        audience: "採用候補者向け",
+        desc: "応募者に受けてもらう適性診断テストです。",
+        hint: "<b>使い方:</b> 面接前に採用候補者へこのリンクを送付し、回答してもらいます。（社内向けではありません）",
+        note: "↗ 候補者への送付用リンク"
+      }
+    ]
+  }
+];
+
+const zonesEl = document.getElementById('zones');
+const searchEl = document.getElementById('search');
+const resultCountEl = document.getElementById('resultCount');
+const emptyMsgEl = document.getElementById('emptyMsg');
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function cardHtml(tool){
+  return `
+    <div class="card" data-search="${escapeHtml((tool.name + ' ' + tool.audience + ' ' + tool.desc).toLowerCase())}">
+      <div class="card-top">
+        <h3>${escapeHtml(tool.name)}</h3>
+        <span class="audience">${escapeHtml(tool.audience)}</span>
+      </div>
+      <p class="desc">${escapeHtml(tool.desc)}</p>
+      <p class="hint">${tool.hint}</p>
+      ${tool.note ? `<span class="note-pill">${escapeHtml(tool.note)}</span>` : ''}
+      <div class="card-footer">
+        <span class="slug">${escapeHtml(tool.slug)}</span>
+        <a class="open-btn" href="${tool.url}" target="_blank" rel="noopener">開く</a>
+      </div>
+    </div>
+  `;
+}
+
+function zoneHtml(zone){
+  const cards = zone.tools.map(cardHtml).join('');
+  return `
+    <div class="zone" data-zone="${zone.code}">
+      <div class="zone-divider">
+        <span class="zone-tag">ZONE ${zone.code}</span>
+        <span class="zone-title">${escapeHtml(zone.title)}</span>
+        <span class="zone-line"></span>
+      </div>
+      <div class="cards">${cards}</div>
+    </div>
+  `;
+}
+
+function render(){
+  zonesEl.innerHTML = ZONES.map(zoneHtml).join('');
+}
+
+function totalToolCount(){
+  return ZONES.reduce((sum, z) => sum + z.tools.length, 0);
+}
+
+function filter(){
+  const q = searchEl.value.trim().toLowerCase();
+  const cards = zonesEl.querySelectorAll('.card');
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+    const match = !q || card.dataset.search.includes(q);
+    card.style.display = match ? '' : 'none';
+    if(match) visibleCount++;
+  });
+
+  zonesEl.querySelectorAll('.zone').forEach(zone => {
+    const anyVisible = Array.from(zone.querySelectorAll('.card')).some(c => c.style.display !== 'none');
+    zone.style.display = anyVisible ? '' : 'none';
+  });
+
+  if(q){
+    resultCountEl.textContent = `${visibleCount} / ${totalToolCount()} 件`;
+  } else {
+    resultCountEl.textContent = `全 ${totalToolCount()} 件`;
+  }
+  emptyMsgEl.style.display = visibleCount === 0 ? 'block' : 'none';
+}
+
+render();
+filter();
+searchEl.addEventListener('input', filter);
+</script>
+
+</body>
+</html>
