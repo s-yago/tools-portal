@@ -354,7 +354,7 @@
       <p class="lead">営業・工務・事務、日々の実務で使うツールをまとめています。ツール名やキーワードで絞り込みできます。</p>
       <div class="title-block">
         <div class="row"><span class="k">PROJECT</span><span>ViVi不動産 社内ツール一式</span></div>
-        <div class="row"><span class="k">REV</span><span>2026.09</span></div>
+        <div class="row"><span class="k">REV</span><span>2026.10</span></div>
         <div class="row"><span class="k">DRAWN BY</span><span>S.YAGO</span></div>
       </div>
     </div>
@@ -445,7 +445,7 @@ const ZONES = [
         audience: "事務・営業",
         desc: "決済時の清算書・案内書類を自動作成します。",
         hint: "<b>判定:</b> 売主・買主の分類はハトサポPDFの表記から自動判定。代理人がいる場合も入力対応しています。<br><b>見られる人:</b> ViVi不動産の社員のみ（会社のGoogleアカウントで開いてください。パスワードは不要になりました）。",
-        note: "🔒 パスワード保護あり"
+        note: "🔒 会社のGoogleアカウントでログイン"
       },
       {
         name: "ライフプランシミュレーター",
@@ -524,6 +524,15 @@ const ZONES = [
     code: "D",
     title: "業務管理",
     tools: [
+      {
+        name: "物確・案内予約ツール",
+        url: "https://script.google.com/a/macros/vivi-f.jp/s/AKfycbytm-UKJ0dbDlgVCzH_0sc_CY6TpW5iG4JqBAI5020niKdCEUd5u-KFa1Bh9RhMHoyy/exec?page=staff",
+        slug: "bukkaku-yoyaku",
+        audience: "営業・事務",
+        desc: "他業者さん・お客様からの物確と案内予約を受け付け、鍵の管理・案内後アンケート・売主報告までを扱うツールです。",
+        hint: "<b>入り方:</b> 会社のGoogleアカウントでログインして開きます（ViVi不動産の社員のみ）。お客様・業者さん向けの予約ページとは別の、社内スタッフ画面です。<br><b>主な機能:</b> 担当者のカレンダーから空き枠を表示、鍵の貸出・準備の管理、案内後アンケート、売主報告書の作成。",
+        note: "🔒 会社のGoogleアカウントでログイン"
+      },
       {
         name: "買取再販ボード",
         url: "https://script.google.com/macros/s/AKfycbxFu5EqMm0MQ6xUTToMF9rVX3-56rYEtrFVmt2Nv7CRaEiOxwZRA4wVbH_zahWAwGSQ4Q/exec",
